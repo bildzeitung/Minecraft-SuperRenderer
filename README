@@ -1,0 +1,28 @@
+Minecraft SuperRender
+
+Created: 18 OCT 2010
+Author : Daniel M. Klein
+
+Support platforms:
+  - Cygwin
+  - Mac OSX (Snow Leopard)
+
+Goal:
+  To provide an interactive tool to visualize mineral deposits in Minecraft,
+  as bildzeitung is deeply troubled about his mining efficiency.
+
+Features:
+  - fast load
+  - fast render
+  - interactive, 3D viewing
+  - 'you are here' marker
+  - highlight mineral deposits (eg specific block types)
+
+Future features:
+  - cave locator and highlighter
+ 
+Current thoughts:
+  - slice-based rendering; convert vertical levels to 2D images and browse
+    through those. Perhaps employ some sort of volumetric rendering
+  - find ways to abuse threads and multiple processors, given the large #
+    of data files the game uses
