@@ -1,7 +1,17 @@
 Minecraft SuperRender
+=====================
 
 Created: 18 OCT 2010
 Author : Daniel M. Klein
+
+Tasks:
+  * NBT loader
+    - stream loading capability
+    - support all necessary types for maps
+  - find good in-memory data structure for map slices
+  - develop intelligent loading (so it's not just a sweep of everything and
+    allows for interactive user stuff as quickly as possible)
+  - visualizer
 
 Support platforms:
   - Cygwin
