@@ -9,6 +9,8 @@
 #include <zlib.h>
 #include "common.h"
 #include "list.h"
+#include "tag_short.h"
+#include "tag_long.h"
 #include "tag_string.h"
 #include "tag_compound.h"
 #include "named_tag.h"
@@ -50,16 +52,30 @@ int read_named_tag( gzFile f, Named_Tag* n ) {
   rc = get_named_tag(f, n ) ;
   if ( !rc ) { printf( "[NT] Could not read named tag\n" ) ; return FALSE ; }
   
+  printf("[NT] Handling tag %s\n", n->name ) ;
+  
   switch ( n->type ) {
-    case TAG_Compound:
-	  n->payload = new_list();
-	  rc = read_tag_compound( f, n->payload );
+	case TAG_End:      //  0
+	  n->payload = NULL;
 	  break;
-	case TAG_String:
+	case TAG_Short:    //  2
+	  n->payload = malloc(sizeof(short));
+	  rc = get_tag_short( f, n->payload ) ;
+	  break;
+	case TAG_Long:     //  4
+	  n->payload = malloc(sizeof(long long));
+	  rc = get_tag_long( f, n->payload ) ;
+	  break;
+	case TAG_Float:    //  5
+	  printf( "A float is %i\n", sizeof(float));
+	  n->payload = malloc(sizeof(float));
+	  break;
+	case TAG_String:   //  8
 	  rc = get_tag_string( f, (char**)&(n->payload) ) ;
 	  break;
-	case TAG_End:
-	  n->payload = NULL;
+    case TAG_Compound: // 10
+	  n->payload = new_list();
+	  rc = read_tag_compound( f, n->payload );
 	  break;
 	default:
 	  printf( "[NT] Unhandled tag type: %i\n", n->type ) ;
