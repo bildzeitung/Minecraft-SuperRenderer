@@ -24,10 +24,9 @@ int main( int argc, char** argv ) {
 	
 	// we expect the file to start with a compound tag
 	if ( tag.type != TAG_Compound ) {
-		printf( "Expect compound tag\n" ) ;
+		printf( "Expected compound tag\n" ) ;
+		return EXIT_FAILURE;
 	}
-	
-	NT_dispose( &tag ) ;
 	
 	TCompound *c = new_compound(&tag) ;
 	rv = read_TAG_Compound(f, c) ;

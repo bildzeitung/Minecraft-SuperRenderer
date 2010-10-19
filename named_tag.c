@@ -12,7 +12,7 @@
 
 
 int get_tag_type( gzFile f, int* tag ) {
-	int t;
+	int t = 0;
 	
 	int rc = gzread( f, &t, 1);
 	if ( rc != 1 ) {

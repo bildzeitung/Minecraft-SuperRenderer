@@ -20,5 +20,7 @@ int get_tag_short( gzFile f, short *s) {
 	// swap bytes; damn endianness
 	*s = ( (t & 8) << 8 ) | (t >> 8) ;
 	
+	//printf("[TS] %i\n",*s);
+	
 	return TRUE;
 }
