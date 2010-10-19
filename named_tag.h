@@ -12,10 +12,15 @@
 typedef struct _Named_Tag {
 	int type;
 	char* name;
+	void* payload;
 } Named_Tag;
 
 int get_tag_type( gzFile, int* ) ;
 int get_named_tag( gzFile, Named_Tag* ) ;
 void NT_dispose( Named_Tag* ) ;
+
+
+void print_named_tag( Named_Tag* ) ;
+int read_named_tag( gzFile, Named_Tag* ) ;
 
 #endif

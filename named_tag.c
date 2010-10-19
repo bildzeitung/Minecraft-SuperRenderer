@@ -6,9 +6,68 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <zlib.h>
 #include "common.h"
+#include "list.h"
 #include "tag_string.h"
+#include "tag_compound.h"
 #include "named_tag.h"
+
+void print_list(list*, int) ;
+
+void _print_named_tag( Named_Tag* n, int indent ) {
+  for ( int i = 0; i < indent ; i++ ) printf("  ") ;
+
+  switch ( n->type ) {
+    case TAG_Compound:
+		printf( "Tag_Compound(\"%s\"): %i entries\n{\n", n->name, ((list*)(n->payload))->count ) ;
+		print_list( n->payload, indent+1 ) ;
+		printf( "}\n" ) ;
+		break;
+	case TAG_String:
+		printf( "TAG_String(\"%s\"): %s\n", n->name, (char*)n->payload );
+		break;
+	default:
+	  printf( "[PT] Unhandled tag type: %i\n", n->type ) ;
+  }  
+}
+
+void print_list( list* l, int indent ) {
+  while ( l->next != NULL ) {
+	_print_named_tag( l->data, indent ) ;
+	l = l->next ;
+  }
+}
+
+void print_named_tag( Named_Tag* n ) {
+  _print_named_tag( n, 0 ) ;
+}
+
+
+int read_named_tag( gzFile f, Named_Tag* n ) {
+  int rc;
+  
+  rc = get_named_tag(f, n ) ;
+  if ( !rc ) { printf( "[NT] Could not read named tag\n" ) ; return FALSE ; }
+  
+  switch ( n->type ) {
+    case TAG_Compound:
+	  n->payload = new_list();
+	  rc = read_tag_compound( f, n->payload );
+	  break;
+	case TAG_String:
+	  rc = get_tag_string( f, (char**)&(n->payload) ) ;
+	  break;
+	case TAG_End:
+	  n->payload = NULL;
+	  break;
+	default:
+	  printf( "[NT] Unhandled tag type: %i\n", n->type ) ;
+	  return FALSE;
+  }
+  
+  return rc ;
+}
 
 
 int get_tag_type( gzFile f, int* tag ) {

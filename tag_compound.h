@@ -12,13 +12,6 @@
 #ifndef __tag_compound_h
 #define __tag_compound_h
 
-typedef struct _TCompound {
-	int count;
-	list* payload;
-	Named_Tag* tag;	
-} TCompound;
-
-TCompound* new_compound(Named_Tag*) ;
-int read_TAG_Compound( gzFile, TCompound* ) ;
+int read_tag_compound( gzFile, list* ) ;
 
 #endif

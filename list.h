@@ -3,18 +3,19 @@
 // Created: 17 OCT 2010
 // Author : Daniel M. Klein
 //
+#include "named_tag.h"
 
 #ifndef __LIST__
 #define __LIST__
 
 typedef struct _list {
-	void* data ;
+	Named_Tag* data ;
 	struct _list* next ;
 	int count ;
 } list ;
 
 list* new_list() ;
 
-void add_item( list*, void* ) ;
+void l_append( list*, Named_Tag* ) ;
 
 #endif
