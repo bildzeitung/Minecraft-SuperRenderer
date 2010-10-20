@@ -11,6 +11,7 @@
 #include "list.h"
 #include "tag_short.h"
 #include "tag_long.h"
+#include "tag_float.h"
 #include "tag_string.h"
 #include "tag_compound.h"
 #include "named_tag.h"
@@ -67,8 +68,8 @@ int read_named_tag( gzFile f, Named_Tag* n ) {
 	  rc = get_tag_long( f, n->payload ) ;
 	  break;
 	case TAG_Float:    //  5
-	  printf( "A float is %i\n", sizeof(float));
 	  n->payload = malloc(sizeof(float));
+	  rc = get_tag_float( f, n->payload ) ;
 	  break;
 	case TAG_String:   //  8
 	  rc = get_tag_string( f, (char**)&(n->payload) ) ;
