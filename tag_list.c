@@ -9,6 +9,7 @@
 
 #include "common.h"
 
+#include "tag_byte.h"
 #include "tag_short.h"
 #include "tag_int.h"
 #include "tag_long.h"
@@ -41,8 +42,8 @@ int read_tag_list( gzFile f, rough_list* l ) {
 	for (int i = 0 ; i < l->length ; i++) {
 		switch (l->type) {
 			case TAG_Byte:       //  1
-				printf( "[TL] unhandled type\n" ) ;
-				return FALSE;
+				rc = get_tag_byte( f, l->payload[i] );
+				break ;
 			case TAG_Short:      //  2
 				l->payload[i] = malloc(sizeof(short));
 				rc = get_tag_short( f, l->payload[i] ) ;

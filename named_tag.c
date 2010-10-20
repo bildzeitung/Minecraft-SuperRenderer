@@ -9,6 +9,7 @@
 #include <zlib.h>
 #include "common.h"
 #include "list.h"
+#include "tag_byte.h"
 #include "tag_short.h"
 #include "tag_int.h"
 #include "tag_long.h"
@@ -60,6 +61,9 @@ int read_named_tag( gzFile f, Named_Tag* n ) {
   switch ( n->type ) {
 	case TAG_End:      //  0
 	  n->payload = NULL;
+	  break;
+	case TAG_Byte:     //  1
+	  rc = get_tag_byte( f, n->payload ) ;
 	  break;
 	case TAG_Short:    //  2
 	  n->payload = malloc(sizeof(short));
