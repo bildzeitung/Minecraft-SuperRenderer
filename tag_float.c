@@ -10,22 +10,19 @@
 
 int get_tag_float( gzFile f, float *s) {
     union foo {
-	  char  t[4];
+	  int   t;
 	  float f;
 	} bar;
 
-	char t[4] ;
-	int rc = gzread( f, t, 4 ) ;
+	int rc = gzread( f, &(bar.t), 4 ) ;
 	if ( rc != 4 ) {
 		printf( "[TF] float read error\n" ) ;
 		return FALSE;
 	}
-		
-    bar.t[0] = t[3];
-    bar.t[1] = t[2];
-    bar.t[2] = t[1];
-    bar.t[3] = t[0];
-
+	
+	bar.t = ((bar.t & 0xff) << 24) | ((bar.t & 0xff00) << 8) |
+             ((bar.t >> 8) & 0xff00) | ((bar.t >> 24)&0xff);
+	
 	*s = bar.f;
 	
 	//printf("[TF] %f\n", *s);
