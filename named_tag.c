@@ -14,6 +14,7 @@
 #include "tag_int.h"
 #include "tag_long.h"
 #include "tag_float.h"
+#include "tag_byte_array.h"
 #include "tag_string.h"
 #include "tag_list.h"
 #include "tag_compound.h"
@@ -59,36 +60,39 @@ int read_named_tag( gzFile f, Named_Tag* n ) {
   printf("[NT] Handling tag %s\n", n->name ) ;
   
   switch ( n->type ) {
-	case TAG_End:      //  0
+	case TAG_End:        //  0
 	  n->payload = NULL;
 	  break;
-	case TAG_Byte:     //  1
+	case TAG_Byte:       //  1
 	  rc = get_tag_byte( f, n->payload ) ;
 	  break;
-	case TAG_Short:    //  2
+	case TAG_Short:      //  2
 	  n->payload = malloc(sizeof(short));
 	  rc = get_tag_short( f, n->payload ) ;
 	  break;
-	case TAG_Int:      //  3
+	case TAG_Int:        //  3
 	  n->payload = malloc(sizeof(int));
 	  rc = get_tag_int( f, n->payload ) ;
 	  break;
-	case TAG_Long:     //  4
+	case TAG_Long:       //  4
 	  n->payload = malloc(sizeof(long long));
 	  rc = get_tag_long( f, n->payload ) ;
 	  break;
-	case TAG_Float:    //  5
+	case TAG_Float:      //  5
 	  n->payload = malloc(sizeof(float));
 	  rc = get_tag_float( f, n->payload ) ;
 	  break;
-	case TAG_String:   //  8
+	case TAG_Byte_Array: //  7
+	  rc = get_tag_byte_array( f, &(n->payload) );
+	  break;
+	case TAG_String:     //  8
 	  rc = get_tag_string( f, (char**)&(n->payload) ) ;
 	  break;
-	case TAG_TAG_List: //  9
+	case TAG_TAG_List:   //  9
 	  n->payload = malloc(sizeof(rough_list));
 	  rc = read_tag_list( f, n->payload );
 	  break;
-    case TAG_Compound: // 10
+    case TAG_Compound:   // 10
 	  n->payload = new_list();
 	  rc = read_tag_compound( f, n->payload );
 	  break;
