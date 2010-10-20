@@ -4,8 +4,6 @@
 // Author : Daniel M. Klein
 //
 
-#include <zlib.h>
-
 #ifndef __tag_short_h
 #define __tag_short_h
 
