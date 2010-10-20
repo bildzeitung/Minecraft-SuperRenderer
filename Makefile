@@ -3,7 +3,7 @@
 # Author : Daniel M. Klein
 #
 
-SRCS=main.o list.o named_tag.o tag_short.o tag_string.o tag_compound.o tag_long.o tag_float.o
+SRCS=main.o list.o named_tag.o tag_short.o tag_string.o tag_compound.o tag_long.o tag_float.o tag_int.o
 EXEC=main
 OBJS=$(SRCS:.c=.o)
 CC=gcc

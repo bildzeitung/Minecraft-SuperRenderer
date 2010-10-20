@@ -10,6 +10,7 @@
 #include "common.h"
 #include "list.h"
 #include "tag_short.h"
+#include "tag_int.h"
 #include "tag_long.h"
 #include "tag_float.h"
 #include "tag_string.h"
@@ -62,6 +63,10 @@ int read_named_tag( gzFile f, Named_Tag* n ) {
 	case TAG_Short:    //  2
 	  n->payload = malloc(sizeof(short));
 	  rc = get_tag_short( f, n->payload ) ;
+	  break;
+	case TAG_Int:      //  3
+	  n->payload = malloc(sizeof(int));
+	  rc = get_tag_int( f, n->payload ) ;
 	  break;
 	case TAG_Long:     //  4
 	  n->payload = malloc(sizeof(long long));
