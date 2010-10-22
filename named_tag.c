@@ -6,6 +6,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <zlib.h>
 #include "common.h"
 #include "list.h"
@@ -23,21 +24,46 @@
 
 void print_list(list*, int) ;
 
-void _print_named_tag( Named_Tag* n, int indent ) {
-  for ( int i = 0; i < indent ; i++ ) printf("  ") ;
+void _print_named_tag( Named_Tag* n, int indent_in ) {
+	size_t indent_s = ((indent_in*2)+1)*sizeof(char);
+	char *indent = (char*)malloc(indent_s);
+	memset(indent,' ',indent_s);
+	indent[indent_in*2] = '\0';
+	
+  //for ( int i = 0; i < indent ; i++ ) printf("  ") ;
+	printf("%s",indent);
 
   switch ( n->type ) {
+	  case TAG_Short:   // 2
+	    printf( "TAG_Short(\"%s\"): %i\n", n->name, *((short*)n->payload));
+	    break;
+		case TAG_Int:     // 3
+			printf( "TAG_Int(\"%s\"): %i\n", n->name, *((int*)n->payload));
+			break;
+	  case TAG_Long:    // 4
+		  printf( "TAG_Long(\"%s\"): %li\n", n->name, *((long*)n->payload));
+		  break;
+	  case TAG_Float:   // 5
+			printf( "TAG_Float(\"%s\"): %f\n", n->name, *((float*)n->payload));
+			break;
+		case TAG_Double:  // 6
+	    printf( "TAG_Double(\"%s\"): %.15f\n", n->name, *((double*)n->payload));
+	    break;		
+		case TAG_String:  // 8
+			printf( "TAG_String(\"%s\"): %s\n", n->name, (char*)n->payload );
+			break;
     case TAG_Compound:
-		printf( "Tag_Compound(\"%s\"): %i entries\n{\n", n->name, ((list*)(n->payload))->count ) ;
-		print_list( n->payload, indent+1 ) ;
-		printf( "}\n" ) ;
-		break;
-	case TAG_String:
-		printf( "TAG_String(\"%s\"): %s\n", n->name, (char*)n->payload );
-		break;
-	default:
-	  printf( "[PT] Unhandled tag type: %i\n", n->type ) ;
+			printf( "Tag_Compound(\"%s\"): %i entries\n%s{\n", 
+					    n->name, ((list*)(n->payload))->count, indent 
+					  ) ;
+			print_list( n->payload, indent_in+1 ) ;
+			printf( "%s}\n", indent ) ;
+			break;
+	  default:
+	    printf( "[PT] Unhandled tag type: %i\n", n->type ) ;
   }  
+
+	free(indent);
 }
 
 void print_list( list* l, int indent ) {
@@ -58,7 +84,7 @@ int read_named_tag( gzFile f, Named_Tag* n ) {
   rc = get_named_tag(f, n ) ;
   if ( !rc ) { printf( "[NT] Could not read named tag\n" ) ; return FALSE ; }
   
-  printf("[NT] Handling tag %s\n", n->name ) ;
+  //printf("[NT] Handling tag %s\n", n->name ) ;
   
   switch ( n->type ) {
 	case TAG_End:        //  0
@@ -76,7 +102,7 @@ int read_named_tag( gzFile f, Named_Tag* n ) {
 	  rc = get_tag_int( f, n->payload ) ;
 	  break;
 	case TAG_Long:       //  4
-	  n->payload = malloc(sizeof(long long));
+	  n->payload = malloc(sizeof(long));
 	  rc = get_tag_long( f, n->payload ) ;
 	  break;
 	case TAG_Float:      //  5

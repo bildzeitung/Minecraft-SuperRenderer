@@ -14,6 +14,7 @@
 
 int main( int argc, char** argv ) {
 	gzFile f = gzopen( "test/bigtest.nbt", "r" ) ;
+	//gzFile f = gzopen( "test/test.nbt", "r" ) ;
 	if ( !f ) { printf( "Bad filename\n" ) ; return EXIT_FAILURE ;}
 
 	Named_Tag tag;	
