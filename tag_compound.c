@@ -23,12 +23,14 @@ int read_tag_compound( gzFile f, list* l ) {
 	if ( !rc ) { printf( "[TC] cannot read first tag" ); return FALSE ;}
 	while ( n->type != TAG_End ) {
 		l_append( current, n );
-		current = l->next;
+		current = current->next;
 	  
 		n = (Named_Tag*)malloc(sizeof(Named_Tag));
 		rc = read_named_tag( f, n );
 		if ( !rc ) { printf( "[TC] cannot read tag in list" ); return FALSE ;}
 	}
+
+	l->count = current->count;
 
 	return TRUE;
 }

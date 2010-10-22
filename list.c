@@ -20,6 +20,5 @@ list* new_list() {
 void l_append( list* l, Named_Tag* i ) {
 	l->data        = i;
 	l->next        = new_list() ;	
-	l->next->count = l->count ;
-	l->count      += 1 ;
+	l->next->count = l->count + 1;
 }
