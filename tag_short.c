@@ -21,7 +21,7 @@ int get_tag_short( gzFile f, short *s) {
 	*s = ( (t & 0xff) << 8 ) | ((t >> 8) & 0xff) ;
 	
 	//printf("[TS] sizeof: %li\n", sizeof(short)) ;
-	printf("[TS] %i\n",*s);
+	//printf("[TS] %i\n",*s);
 	
 	return TRUE;
 }
