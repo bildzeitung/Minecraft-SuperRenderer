@@ -13,14 +13,15 @@ int get_tag_short( gzFile f, short *s) {
 	
 	int rc = gzread( f, &t, 2 ) ;
 	if ( rc != 2 ) {
-		printf( "GZip short read error\n" ) ;
+		printf( "[TS] short read error\n" ) ;
 		return FALSE;
 	}
 	
 	// swap bytes; damn endianness
-	*s = ( (t & 8) << 8 ) | (t >> 8) ;
+	*s = ( (t & 0xff) << 8 ) | ((t >> 8) & 0xff) ;
 	
-	//printf("[TS] %i\n",*s);
+	//printf("[TS] sizeof: %li\n", sizeof(short)) ;
+	printf("[TS] %i\n",*s);
 	
 	return TRUE;
 }
