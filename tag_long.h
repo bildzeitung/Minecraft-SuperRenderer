@@ -4,9 +4,12 @@
 // Author : Daniel M. Klein
 //
 
+#include <zlib.h>
+#include "common.h"
+
 #ifndef __tag_long_h
 #define __tag_long_h
 
-int get_tag_long( gzFile, long long* ) ;
+int get_tag_long( gzFile, TAG_LONG_TYPE* ) ;
 
 #endif

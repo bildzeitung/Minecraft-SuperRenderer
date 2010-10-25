@@ -24,4 +24,11 @@
 
 extern char* tag_labels[] ;
 
+#ifdef __CYGWIN32__
+#define TAG_LONG_TYPE long long
+#define TAG_LONG_LONG
+#else
+#define TAG_LONG_TYPE long
+#endif
+
 #endif

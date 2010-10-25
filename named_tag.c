@@ -77,7 +77,11 @@ void print_TAG_Int( Named_Tag* n, int i ) {
 }
 
 void print_TAG_Long( Named_Tag* n, int i ) {
-  printf( "%li\n", *((long*)n->payload));
+#ifdef TAG_LONG_LONG
+  printf( "%lld\n", *((TAG_LONG_TYPE*)n->payload));
+#else
+  printf( "%li\n", *((TAG_LONG_TYPE*)n->payload));
+#endif
 }
 
 void print_TAG_Float( Named_Tag* n, int i ) {
