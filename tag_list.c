@@ -14,6 +14,7 @@
 #include "tag_int.h"
 #include "tag_long.h"
 #include "tag_float.h"
+#include "tag_double.h"
 #include "named_tag.h"
 #include "tag_string.h"
 #include "tag_list.h"
@@ -36,7 +37,7 @@ int read_tag_list( gzFile f, rough_list* l ) {
 	}
 	
 	//printf( "[TL] # of entries: %i\n", l->length ) ; 
-	//printf( "[TL] type        : %i\n", l->type ) ;
+	//printf( "[TL] type        : %s\n", tag_labels[l->type] ) ;
 	
 	l->payload = (void**)(malloc(sizeof(void*)*l->length));	
 	for (int i = 0 ; i < l->length ; i++) {
@@ -53,7 +54,7 @@ int read_tag_list( gzFile f, rough_list* l ) {
 				rc = get_tag_int( f, l->payload[i] ) ;
 				break;
 			case TAG_Long:       //  4
-				l->payload[i] = malloc(sizeof(long));
+				l->payload[i] = malloc(sizeof(TAG_LONG_TYPE));
 				rc = get_tag_long( f, l->payload[i] ) ;
 				break;
 			case TAG_Float:      //  5
@@ -61,8 +62,9 @@ int read_tag_list( gzFile f, rough_list* l ) {
 				rc = get_tag_float( f, l->payload[i] ) ;
 				break;
 			case TAG_Double:     //  6
-				printf( "[TL] unhandled type 6\n" ) ;
-				return FALSE;
+				l->payload[i] = malloc(sizeof(double));
+				rc = get_tag_double( f, l->payload[i] ) ;
+				break;
 			case TAG_Byte_Array: //  7
 				printf( "[TL] unhandled type 7\n" ) ;
 				return FALSE;
