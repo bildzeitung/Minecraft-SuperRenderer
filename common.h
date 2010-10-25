@@ -22,4 +22,6 @@
 #define TAG_TAG_List    9
 #define TAG_Compound   10
 
+extern char* tag_labels[] ;
+
 #endif

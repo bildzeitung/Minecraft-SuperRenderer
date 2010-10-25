@@ -9,12 +9,12 @@
 #include <stdlib.h>
 #include "common.h"
 #include "tag_int.h"
+#include "tag_byte_array.h"
 
-int get_tag_byte_array( gzFile f, void **s) {
+int get_tag_byte_array( gzFile f, byte_array* s) {
 	int rc;
 
-	int length; 
-	rc = get_tag_int( f, &length );
+	rc = get_tag_int( f, &(s->length) );
 	if ( !rc ) {
 		printf( "[TBA] cannot get byte array length\n" ) ;
 		return FALSE;
@@ -22,15 +22,15 @@ int get_tag_byte_array( gzFile f, void **s) {
 
 	//printf( "[TBA] length: %i\n", length ) ;
 	
-	void* barray = malloc(length);
+	void* barray = malloc(s->length);
 	
-	rc = gzread( f, barray, length ) ;
-	if ( rc != length ) {
-		printf( "[TBA] cannot read %i bytes\n", length ) ;
+	rc = gzread( f, barray, s->length ) ;
+	if ( rc != s->length ) {
+		printf( "[TBA] cannot read %i bytes\n", s->	length ) ;
 		return FALSE;
 	}
 
-	*s = barray;
+	s->data = barray;
 	
 	return TRUE;
 }
