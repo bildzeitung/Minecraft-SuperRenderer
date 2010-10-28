@@ -7,32 +7,73 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <zlib.h>
+#include <dirent.h>
+#include <string.h>
 
 #include "common.h"
 #include "named_tag.h"
+#include "main.h"
 
-char* tag_labels[] = {
-	"TAG_End",         // 0
-	"TAG_Byte",        // 1
-	"TAG_Short",       // 2
-	"TAG_Int",         // 3
-	"TAG_Long",        // 4
-	"TAG_Float",       // 5
-	"TAG_Double",      // 6
-	"TAG_Byte_Array",  // 7
-	"TAG_String",      // 8
-	"TAG_List",        // 9
-	"TAG_Compound"     // 10
-};
+void process_file( char* c ) {
+	gzFile f = gzopen( c, "r") ;	
+	if ( !f ) { printf( "Bad filename\n" ) ; return ;}
+
+	Named_Tag tag;	
+	int rv = read_named_tag( f, &tag ) ;	
+	if ( !rv ) { printf( "[main] Could not get tag\n" ) ; return ;}	
+	
+	//print_named_tag( &tag ) ;
+	
+	gzclose(f);
+}
+
+void process_dir( char* c ) {
+	//printf("Processing %s\n", c) ;
+	DIR* d = opendir( c ) ;
+
+	struct dirent* e;
+	while (  (e=readdir(d)) ) {
+		// skip dot, dot-dot
+		if ( !strcmp(e->d_name,"." ) ) continue;
+		if ( !strcmp(e->d_name,".." ) ) continue;
+		// skip player info
+		if ( !strcmp(e->d_name,"level.dat" ) ) continue;
+		// only directories and .dat files
+		
+		if ( e->d_type == DT_DIR ) {
+			int len = strlen(c) + 1 + strlen(e->d_name) + 1 ;
+			char *f = (char*)malloc(sizeof(char)*len);
+			strcpy(f,c);
+			strcat(f,"/");
+			strcat(f,e->d_name);
+			process_dir(f);
+			free(f);
+			continue;
+		}
+		
+		if ( !strstr(e->d_name+strlen(e->d_name)-4, ".dat" )) continue ;
+		
+		// ok, we have a file to process
+		char* fname = (char*)malloc(sizeof(char)*(strlen(c)+strlen(e->d_name)+2));
+		strcpy(fname,c) ; strcat(fname,"/") ; strcat(fname,e->d_name);
+		process_file(fname);
+	  free(fname);
+	
+		//printf("%s\n", e->d_name ) ;
+	}
+	
+	closedir(d);
+}
 
 int main( int argc, char** argv ) {
-	//gzFile f = gzopen( "test/bigtest.nbt", "r" ) ;
-	//gzFile f = gzopen( "test/test.nbt", "r" ) ;
 	if ( argc < 2 ) {
-		printf( "Need a filename\n" ) ;
+		printf( "Need a directory\n" ) ;
 		return EXIT_FAILURE;
 	}
 
+	process_dir(argv[1]) ;
+
+/*
 	gzFile f = gzopen( argv[1], "r") ;	
 	if ( !f ) { printf( "Bad filename\n" ) ; return EXIT_FAILURE ;}
 
@@ -47,6 +88,6 @@ int main( int argc, char** argv ) {
 	}
 	
 	print_named_tag( &tag ) ;
-	
+*/
 	return EXIT_SUCCESS;
 }
