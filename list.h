@@ -18,4 +18,6 @@ list* new_list() ;
 
 void l_append( list*, Named_Tag* ) ;
 
+//Named_Tag* at( list*, int ) ;
+
 #endif

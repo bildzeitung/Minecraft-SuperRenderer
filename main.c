@@ -12,19 +12,40 @@
 
 #include "common.h"
 #include "named_tag.h"
+#include "callbacks.h"
+#include "player.h"
+#include "tag_list.h"
 #include "main.h"
+
+
+player Player;
+
+/*
+#define BLOCKSIZE 32768
+
+int     bnum = 100;
+char *blocks ;
+int  *blockx ;
+int  *blocky ;
+*/
+
 
 void process_file( char* c ) {
 	gzFile f = gzopen( c, "r") ;	
 	if ( !f ) { printf( "Bad filename\n" ) ; return ;}
 
-	Named_Tag tag;	
-	int rv = read_named_tag( f, &tag ) ;	
+	printf("File: %s\n",c);
+
+	Named_Tag* tag = NT_new();	
+	int rv = read_named_tag( f, tag ) ;	
 	if ( !rv ) { printf( "[main] Could not get tag\n" ) ; return ;}	
 	
-	//print_named_tag( &tag ) ;
+	//print_named_tag( tag ) ;
+	//printf("\n");
 	
+	// clean up
 	gzclose(f);
+	NT_dispose(tag);
 }
 
 void process_dir( char* c ) {
@@ -65,11 +86,39 @@ void process_dir( char* c ) {
 	closedir(d);
 }
 
+int position( const Named_Tag* n) {
+	rough_list* p = (rough_list*)n->payload;
+		
+	Player.x = *((double*)p->payload[0]);
+	Player.y = *((double*)p->payload[1]);
+	Player.z = *((double*)p->payload[2]);
+	
+	//print_named_tag(n) ;	
+	printf("(%f, %f, %f)\n", Player.x, Player.y, Player.z);
+		
+	return TRUE;
+}
+
 int main( int argc, char** argv ) {
 	if ( argc < 2 ) {
 		printf( "Need a directory\n" ) ;
 		return EXIT_FAILURE;
 	}
+
+	register_named_tag( "Pos", &position ) ;
+
+	char* d = "/level.dat" ;
+	int l = strlen(argv[1]) + strlen(d) + 1;
+	char *level = (char*)(malloc(l*sizeof(char)));
+	strcpy(level,argv[1]); strcat(level, d) ;
+	process_file(level);
+
+	unregister_named_tag( "Pos" ) ;
+
+  // pretend that 100 blocks is good enough to start
+	//blocks = (char*)(malloc(sizeof(char)*bnum*BLOCKSIZE));
+	//blockx = (int*)(malloc(sizeof(int)*bnum));
+	//blocky = (int*)(malloc(sizeof(int)*bnum));
 
 	process_dir(argv[1]) ;
 

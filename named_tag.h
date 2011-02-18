@@ -17,10 +17,13 @@ typedef struct _Named_Tag {
 
 int get_tag_type( gzFile, int* ) ;
 int get_named_tag( gzFile, Named_Tag* ) ;
+
+// memory handling
+Named_Tag* NT_new() ;
 void NT_dispose( Named_Tag* ) ;
 
 
-void print_named_tag( Named_Tag* ) ;
+void print_named_tag( const Named_Tag* ) ;
 int read_named_tag( gzFile, Named_Tag* ) ;
 
 #endif

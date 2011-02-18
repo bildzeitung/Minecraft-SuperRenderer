@@ -28,21 +28,21 @@ void _print_indent( int i ) {
 	for (int j = 0 ; j < i ; j++ ) printf("  ") ;
 }
 
-void print_TAG_End( Named_Tag* n, int i ) {}
+void print_TAG_End( const Named_Tag* n, int i ) {}
 
-void print_TAG_Byte( Named_Tag* n, int i ) {
+void print_TAG_Byte( const Named_Tag* n, int i ) {
 	printf( "%u\n", ((unsigned char*)n->payload)[0] ) ;
 }
 
-void print_TAG_Short( Named_Tag* n, int i ) {
+void print_TAG_Short( const Named_Tag* n, int i ) {
   printf( "%i\n", *((short*)n->payload));	
 }
 
-void print_TAG_Int( Named_Tag* n, int i ) {
+void print_TAG_Int( const Named_Tag* n, int i ) {
 	printf( "%i\n", *((int*)n->payload));	
 }
 
-void print_TAG_Long( Named_Tag* n, int i ) {
+void print_TAG_Long( const Named_Tag* n, int i ) {
 #ifdef TAG_LONG_LONG
   printf( "%lld\n", *((TAG_LONG_TYPE*)n->payload));
 #else
@@ -50,15 +50,15 @@ void print_TAG_Long( Named_Tag* n, int i ) {
 #endif
 }
 
-void print_TAG_Float( Named_Tag* n, int i ) {
+void print_TAG_Float( const Named_Tag* n, int i ) {
 	printf( "%.8f\n", *((float*)n->payload));
 }
 
-void print_TAG_Double( Named_Tag* n, int i ) {
+void print_TAG_Double( const Named_Tag* n, int i ) {
   printf( "%.16f\n", *((double*)n->payload));
 }
 
-void print_TAG_Byte_Array( Named_Tag* n, int i ) {
+void print_TAG_Byte_Array( const Named_Tag* n, int i ) {
 	byte_array* b = (byte_array*)n->payload;
 	
 	printf( "[%i bytes]\n", b->length) ;
@@ -72,11 +72,11 @@ void print_TAG_Byte_Array( Named_Tag* n, int i ) {
 	printf("\n");
 }
 
-void print_TAG_String( Named_Tag* n, int i ) {
+void print_TAG_String( const Named_Tag* n, int i ) {
 	printf( "%s\n", (char*)n->payload );
 }
 
-void print_TAG_List( Named_Tag* n, int i ) {
+void print_TAG_List( const Named_Tag* n, int i ) {
 	rough_list* r = (rough_list*)n->payload;
 	
 	printf("%i entries of type %s\n", r->length, tag_labels[r->type] ) ;
@@ -95,7 +95,7 @@ void print_TAG_List( Named_Tag* n, int i ) {
 	_print_indent( i ) ; printf( "}\n" ) ;	
 }
 
-void print_TAG_Compound( Named_Tag* n, int i ) {
+void print_TAG_Compound( const Named_Tag* n, int i ) {
 	list* l = (list*)n->payload;
 	
 	printf( "%i entries\n", l->count) ;
@@ -109,7 +109,7 @@ void print_TAG_Compound( Named_Tag* n, int i ) {
 	_print_indent( i ) ; printf( "}\n" ) ;
 }
 
-void _print_named_tag( Named_Tag* n, int indent_in ) {	
+void _print_named_tag( const Named_Tag* n, int indent_in ) {	
 	_print_indent(indent_in);
 	printf( "%s(\"%s\"): ", tag_labels[n->type], n->name ) ;
 	print_fns[n->type](n, indent_in) ;

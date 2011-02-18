@@ -11,6 +11,8 @@
 
 #include "common.h"
 #include "list.h"
+#include "callbacks.h"
+
 #include "tag_byte.h"
 #include "tag_short.h"
 #include "tag_int.h"
@@ -24,7 +26,7 @@
 #include "tag_print.h"
 #include "named_tag.h"
 
-void print_named_tag( Named_Tag* n ) {
+void print_named_tag( const Named_Tag* n ) {
   _print_named_tag( n, 0 ) ;
 }
 
@@ -84,6 +86,8 @@ int read_named_tag( gzFile f, Named_Tag* n ) {
 	  return FALSE;
   }
 
+	rc = exec_named_tag_callbacks(n);
+
   return rc ;
 }
 
@@ -106,23 +110,42 @@ int get_tag_type( gzFile f, int* tag ) {
 
 
 int get_named_tag( gzFile f, Named_Tag *n ) {
-	int type;
 	char* name = NULL;
 	
-	int rv = get_tag_type( f, &type ) ;
+	int rv = get_tag_type( f, &(n->type) ) ;
 	if ( rv != TRUE ) { printf( "[NT] error: short\n" ) ; return FALSE ; }
 
-  if ( type != TAG_End ) {
+  if ( n->type != TAG_End ) {
 	  rv = get_tag_string( f, &name ) ;
 	  if ( rv != TRUE ) { printf( "[NT] error: string\n" ) ; return FALSE ; }
   }
 
-	n->type = type ; n->name = name ;
+	n->name = name ;
 	
 	return TRUE;
 }
 
-
+//
+//
+//
 void NT_dispose( Named_Tag *n ) {
+	// free the dependents
 	free( n->name ) ;
+	free( n->payload ) ;
+	
+	// free the tag itself
+	free(n) ;
+}
+
+//
+//
+//
+Named_Tag* NT_new() {
+	Named_Tag* n = (Named_Tag*)(malloc(sizeof(Named_Tag))) ;
+	
+	n->type    = -1  ;
+	n->name    = NULL;
+	n->payload = NULL; // @TODO: nested tags need better handling
+	
+	return n ;
 }
