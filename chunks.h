@@ -31,7 +31,7 @@ typedef struct _chunk_lookup {
 
 extern chunk_t* chunks;
 
-void add_chunk( int, int, char* );
+void add_chunk( int, int, unsigned char* );
 void scan_chunks();
 
 #endif

@@ -25,7 +25,8 @@ print_tag_fn print_fns[] = {
 };
 
 void _print_indent( int i ) {
-	for (int j = 0 ; j < i ; j++ ) printf("  ") ;
+	int j;
+	for (j = 0 ; j < i ; j++ ) printf("  ") ;
 }
 
 void print_TAG_End( const Named_Tag* n, int i ) {}
@@ -82,7 +83,8 @@ void print_TAG_List( const Named_Tag* n, int i ) {
 	printf("%i entries of type %s\n", r->length, tag_labels[r->type] ) ;
 	_print_indent( i ) ; printf( "{\n" ) ;
 	
-	for (int j = 0; j < r->length ; j++ ) {
+	int j;
+	for ( j = 0; j < r->length ; j++ ) {
 		Named_Tag q;
 		q.type    = r->type;
 		q.payload = r->payload[j];

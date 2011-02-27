@@ -12,7 +12,6 @@
 
 #include <uthash.h>
 
-#include "common.h"
 #include "named_tag.h"
 
 typedef int(*callback_fn)(const Named_Tag*);

@@ -5,6 +5,8 @@
 //
 
 #include "callbacks.h"
+#include "common.h"
+
 #include <stdio.h>
 
 callback_entry *callback_table = NULL ;

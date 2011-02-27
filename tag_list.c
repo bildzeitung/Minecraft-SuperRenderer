@@ -39,8 +39,9 @@ int read_tag_list( gzFile f, rough_list* l ) {
 	//printf( "[TL] # of entries: %i\n", l->length ) ; 
 	//printf( "[TL] type        : %s\n", tag_labels[l->type] ) ;
 	
+	int i;
 	l->payload = (void**)(malloc(sizeof(void*)*l->length));	
-	for (int i = 0 ; i < l->length ; i++) {
+	for (i = 0 ; i < l->length ; i++) {
 		switch (l->type) {
 			case TAG_Byte:       //  1
 				rc = get_tag_byte( f, l->payload[i] );

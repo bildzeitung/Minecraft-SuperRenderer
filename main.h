@@ -7,7 +7,7 @@
 #ifndef __main_h__
 #define __main_h__
 
-char* tag_labels[] = {
+const char* tag_labels[] = {
 	"TAG_End",         // 0
 	"TAG_Byte",        // 1
 	"TAG_Short",       // 2
