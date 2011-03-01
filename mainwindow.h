@@ -3,6 +3,8 @@
 
 #include <QMainWindow>
 
+#include "viewer.h"
+
 namespace Ui {
     class MainWindow;
 }
@@ -20,6 +22,7 @@ protected slots:
 
 private:
     Ui::MainWindow *ui;
+    Viewer *v;
 
     QString curDir;
 

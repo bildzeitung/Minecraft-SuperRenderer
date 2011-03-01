@@ -5,9 +5,10 @@
 //
 
 #include "chunks.h"
+#include "common.h"
 
 chunk_t* chunks = NULL ;
-
+int key_len     = -1;
 
 void add_chunk( int x, int z, unsigned char* d ) {
   // prep
@@ -18,7 +19,7 @@ void add_chunk( int x, int z, unsigned char* d ) {
   memcpy(c->data,d,BLOCKSIZE);
   c->xPos = x ; c->zPos = z;
 
-  int key_len = offsetof(chunk_t,zPos)
+  key_len = offsetof(chunk_t,zPos)
                 + sizeof(int) - offsetof(chunk_t,xPos);
 	
   // add

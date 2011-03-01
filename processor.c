@@ -77,7 +77,6 @@ int set_z_position( const Named_Tag* n) {
 int save_blocks( const Named_Tag* n) {
   byte_array* b = (byte_array*)n->payload;
 
-  printf("byte_array: %li\n", (long)b->data);
   // instead of copying the memory in, save the pointer
   current_chunk = b->data;
 

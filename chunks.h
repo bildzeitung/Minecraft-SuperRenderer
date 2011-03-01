@@ -13,8 +13,6 @@
 #include <string.h>    /* memset       */
 #include <uthash.h>
 
-#include "common.h"
-
 #define BLOCKSIZE 32768
 
 typedef struct _chunk_t {
@@ -30,6 +28,7 @@ typedef struct _chunk_lookup {
 } chunk_lookup ;
 
 extern chunk_t* chunks;
+extern int key_len;
 
 void add_chunk( int, int, unsigned char* );
 void scan_chunks();

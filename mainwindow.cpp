@@ -3,8 +3,12 @@
 
 #include <QFileDialog>
 #include <QMessageBox>
+#include <QHBoxLayout>
+#include <QSlider>
 
 #include <iostream>
+
+#include "viewer.h"
 
 extern "C" {
 #include "callbacks.h"
@@ -17,7 +21,26 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
+    QFrame *f = new QFrame(this);
+
+    v = new Viewer(this);
+
+    QHBoxLayout *l = new QHBoxLayout(f);
+    f->setLayout(l);
+    l->addWidget(v);
+
+    QSlider *s = new QSlider(Qt::Vertical,f);
+    s->setObjectName("levelSlider");
+    s->setMinimum(0);
+    s->setMaximum(127);
+    s->setSingleStep(1);
+
+    l->addWidget(s);
+
+    setCentralWidget(f);
+
     connect(ui->actionOpen,SIGNAL(triggered()),this,SLOT(open()));
+    connect(s,SIGNAL(valueChanged(int)),v,SLOT(repaint()));
 }
 
 MainWindow::~MainWindow()
@@ -49,4 +72,8 @@ void MainWindow::load(const QString &dirName)
     register_named_tag( "Blocks", save_blocks    ) ;
 
     process_dir(curDir.toStdString().c_str()) ;
+
+    std::cout << "Load complete" << std::endl;
+
+    repaint();
 }
