@@ -13,6 +13,7 @@ extern "C" {
 Viewer::Viewer(QWidget *parent) :
     QWidget(parent)
 {
+    chunk_size = 3;
 }
 
 void Viewer::draw_chunk( int xchunk, int zchunk, int ychunk, int x_off, int y_off )
@@ -28,15 +29,15 @@ void Viewer::draw_chunk( int xchunk, int zchunk, int ychunk, int x_off, int y_of
     if ( !c ) return;
 
     QPainter p(this);
-    p.save();
+    //p.save();
 
     // paint it!
     int topx = x_off;
     int topy = y_off;
     for ( int x = 0 ; x < 16 ; x++ ) {
         for ( int z = 0; z < 16 ; z++ ) {
-            // unsigned char BlockID = Blocks[ y + ( z * ChunkSizeY(=128) + ( x * ChunkSizeY(=128) * ChunkSizeZ(=16) ) ) ];
-            //unsigned char block = c->data[ychunk + (z*128 + (x*128*16) )];
+            // from website:
+            //   unsigned char BlockID = Blocks[ y + ( z * ChunkSizeY(=128) + ( x * ChunkSizeY(=128) * ChunkSizeZ(=16) ) ) ];
             unsigned char block = c->data[ychunk + (z*128 + (x*128*16) )];
             QColor c;
 
@@ -79,14 +80,14 @@ void Viewer::draw_chunk( int xchunk, int zchunk, int ychunk, int x_off, int y_of
             }
 
             //p.drawRect(topx,topy,topx+3,topy+3);
-            p.fillRect(topx,topy,topx+3,topy+3,c);
-            topx += 3;
+            p.fillRect(topx,topy,topx+chunk_size,topy+chunk_size,c);
+            topx += chunk_size;
         }
-        topy += 3;
+        topy += chunk_size;
         topx = x_off;
     }
 
-    p.restore();
+    //p.restore();
 }
 
 void Viewer::paintEvent(QPaintEvent *)
@@ -107,14 +108,14 @@ void Viewer::paintEvent(QPaintEvent *)
 
   int x_offset = 0 ;
   int y_offset = 0 ;
-  int chunk_size = 2 ;
+  int inc = chunk_size * 16;
 
   for ( int i = min_x ; (i < max_x) && (x_offset<width()); i++ ) {
       for ( int j = min_z ; (j < max_z) && (y_offset<height()) ; j++ ) {
           draw_chunk(i,j, level, x_offset, y_offset);
-          x_offset += 16 * chunk_size;
+          x_offset += inc;
       }
-      y_offset += 16 * chunk_size;
+      y_offset += inc;
       x_offset = 0;
   }
 }

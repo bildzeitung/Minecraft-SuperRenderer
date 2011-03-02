@@ -16,6 +16,9 @@ public slots:
 protected:
      void paintEvent(QPaintEvent *);
      void draw_chunk( int, int, int, int, int);
+
+private:
+     int chunk_size;
 };
 
 #endif // VIEWER_H
