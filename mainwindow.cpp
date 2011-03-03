@@ -12,8 +12,9 @@
 
 extern "C" {
 #include "callbacks.h"
-#include "processor.h"
 }
+
+#include "processor.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -65,6 +66,10 @@ void MainWindow::load(const QString &dirName)
     Named_Tag* level_tag = process_file(level.toStdString().c_str());
     NT_dispose(level_tag);
     unregister_named_tag( "Pos") ;
+
+    // set the initial height to where the player is
+    QSlider *s = findChild<QSlider*>("levelSlider");
+    s->setValue((int)Player.y);
 
     // load in the block data
     register_named_tag( "xPos",   set_x_position ) ;

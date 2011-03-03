@@ -9,16 +9,20 @@
 
 #include <stdlib.h>    /* malloc       */
 #include <stddef.h>    /* offsetof     */
-#include <stdio.h>     /* printf       */
 #include <string.h>    /* memset       */
 #include <uthash.h>
 
+#include <QColor>
+#include <QImage>
+
+// blocks are 16x16x128
 #define BLOCKSIZE 32768
 
 typedef struct _chunk_t {
 	int xPos;
 	int zPos;
 	char data[BLOCKSIZE];
+        QImage idata[128];
 	UT_hash_handle hh;
 } chunk_t;
 
@@ -31,6 +35,5 @@ extern chunk_t* chunks;
 extern int key_len;
 
 void add_chunk( int, int, unsigned char* );
-void scan_chunks();
 
 #endif

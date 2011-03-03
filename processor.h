@@ -7,9 +7,11 @@
 #ifndef __processor_h__
 #define __processor_h__
 
+extern "C" {
 #include "named_tag.h"
 #include "tag_list.h"
 #include "player.h"
+}
 
 extern player Player;
 extern int  current_x;

@@ -12,13 +12,14 @@ HEADERS += callbacks.h  named_tag.h      tag_double.h tag_print.h  \
     viewer.h
 
 SOURCES += callbacks.c  named_tag.c      tag_double.c tag_long.c   \
-           chunks.c     tag_byte.c       tag_float.c  tag_print.c  \
+               tag_byte.c       tag_float.c  tag_print.c  \
            list.c       tag_byte_array.c tag_int.c    tag_short.c  \
                  tag_compound.c   tag_list.c   tag_string.c \
     mainwindow.cpp \
     main.cpp \
-    processor.c \
-    viewer.cpp
+    viewer.cpp \
+    chunks.cpp \
+    processor.cpp
 
 INCLUDEPATH = uthash-1.9.3/src
 
